@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pawlos Drug Store</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ========== LOGIN SCREEN ========== -->
+<div id="loginScreen" class="login-screen">
+  <div class="login-card">
+    <div class="login-brand">
+      <div class="brand-mark">✚</div>
+      <h1>Pawlos Drug Store</h1>
+      <p>Sign in to continue</p>
+    </div>
+
+    <form id="loginForm">
+      <label>Username</label>
+      <input type="text" id="loginUsername" placeholder="e.g. admin" required>
+
+      <label>Password</label>
+      <input type="password" id="loginPassword" placeholder="••••••••" required>
+
+      <p class="login-error" id="loginError"></p>
+
+      <button type="submit" class="login-btn">Sign In</button>
+    </form>
+
+    <div class="demo-box">
+      <p><strong>Demo accounts</strong></p>
+      <div class="demo-row">
+        <span>🛡️ Admin</span>
+        <code>admin / admin123</code>
+        <button type="button" class="demo-fill" data-user="admin" data-pass="admin123">Use</button>
+      </div>
+      <div class="demo-row">
+        <span>🧑 Customer</span>
+        <code>customer / customer123</code>
+        <button type="button" class="demo-fill" data-user="customer" data-pass="customer123">Use</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== APP SHELL (hidden until login) ========== -->
+<div id="appShell" class="app-shell hidden">
+
+  <header>
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-mark">✚</div>
+        <div class="brand-text">
+          <h1>Pawlos Drug Store</h1>
+          <p id="headerSubtitle">Trusted medicines &amp; wellness, delivered with care</p>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="user-chip">
+          <span class="role-badge" id="roleBadge">Role</span>
+          <span id="userName">User</span>
+        </div>
+        <button class="logout-btn" id="logoutBtn">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== CUSTOMER VIEW ===== -->
+  <div id="customerView" class="hidden">
+    <div class="toolbar">
+      <div class="search" id="searchBar">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="searchInput" placeholder="Search medicines, vitamins, first aid...">
+        <button class="clear" id="clearBtn" title="Clear search">✕</button>
+      </div>
+    </div>
+
+    <div class="chips" id="chips"></div>
+    <p class="result-meta" id="resultMeta"></p>
+
+    <main class="products" id="products"></main>
+
+    <button class="cart-capsule" id="cartCapsule">
+      <span class="pill-icon">💊</span>
+      <span>Cart</span>
+      <span class="count" id="cartCount">0</span>
+    </button>
+
+    <div class="overlay" id="overlay"></div>
+    <aside class="drawer" id="drawer">
+      <div class="drawer-head">
+        <h2>Your Cart</h2>
+        <button id="closeDrawer">✕</button>
+      </div>
+      <div class="drawer-body" id="drawerBody"></div>
+      <div class="drawer-foot">
+        <div class="row"><span>Subtotal</span><span id="subtotal">0.00 ETB</span></div>
+        <div class="row"><span>Delivery</span><span id="deliveryFee">0.00 ETB</span></div>
+        <div class="row total"><span>Total</span><span id="totalAmt">0.00 ETB</span></div>
+        <button class="checkout-btn" id="checkoutBtn" disabled>Checkout</button>
+      </div>
+    </aside>
+
+    <footer>© 2026 Pawlos Drug Store · For medical emergencies call your local emergency number</footer>
+  </div>
+
+  <!-- ===== ADMIN VIEW ===== -->
+  <div id="adminView" class="hidden admin-shell">
+    <aside class="admin-sidebar">
+      <button class="admin-nav-btn active" data-page="overview">📊 Overview</button>
+      <button class="admin-nav-btn" data-page="products">💊 Products</button>
+      <button class="admin-nav-btn" data-page="orders">🧾 Orders</button>
+    </aside>
+
+    <main class="admin-content">
+
+      <!-- Overview page -->
+      <section id="page-overview" class="admin-page">
+        <h2>Dashboard Overview</h2>
+        <div class="stat-grid">
+          <div class="stat-card">
+            <span class="stat-icon">💊</span>
+            <div><p class="stat-num" id="statProducts">0</p><p class="stat-label">Total Products</p></div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-icon">🧾</span>
+            <div><p class="stat-num" id="statOrders">0</p><p class="stat-label">Total Orders</p></div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-icon">💰</span>
+            <div><p class="stat-num" id="statRevenue">0 ETB</p><p class="stat-label">Total Revenue</p></div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-icon">⚠️</span>
+            <div><p class="stat-num" id="statLowStock">0</p><p class="stat-label">Low Stock Items</p></div>
+          </div>
+        </div>
+        <h3 class="section-title">Recent Orders</h3>
+        <div class="table-wrap"><table id="recentOrdersTable"><thead>
+          <tr><th>Order</th><th>Customer</th><th>Items</th><th>Total</th><th>Status</th></tr>
+        </thead><tbody></tbody></table></div>
+      </section>
+
+      <!-- Products page -->
+      <section id="page-products" class="admin-page hidden">
+        <div class="page-head">
+          <h2>Manage Products</h2>
+          <button class="primary-btn" id="addProductBtn">+ Add Product</button>
+        </div>
+        <div class="table-wrap"><table id="productsTable"><thead>
+          <tr><th></th><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Actions</th></tr>
+        </thead><tbody></tbody></table></div>
+      </section>
+
+      <!-- Orders page -->
+      <section id="page-orders" class="admin-page hidden">
+        <h2>Customer Orders</h2>
+        <div class="table-wrap"><table id="ordersTable"><thead>
+          <tr><th>Order</th><th>Customer</th><th>Date</th><th>Items</th><th>Total</th><th>Status</th></tr>
+        </thead><tbody></tbody></table></div>
+      </section>
+
+    </main>
+  </div>
+
+</div>
+
+<!-- ===== Product Add/Edit Modal ===== -->
+<div class="overlay" id="modalOverlay"></div>
+<div class="modal" id="productModal">
+  <div class="modal-head">
+    <h3 id="modalTitle">Add Product</h3>
+    <button id="modalClose">✕</button>
+  </div>
+  <form id="productForm" class="modal-body">
+    <input type="hidden" id="pfId">
+    <label>Name</label>
+    <input type="text" id="pfName" required>
+
+    <label>Category</label>
+    <input type="text" id="pfCat" required placeholder="e.g. Pain Relief">
+
+    <label>Icon (emoji)</label>
+    <input type="text" id="pfIcon" required placeholder="💊" maxlength="4">
+
+    <label>Price (ETB)</label>
+    <input type="number" id="pfPrice" required min="0" step="0.01">
+
+    <label>Unit</label>
+    <input type="text" id="pfUnit" required placeholder="e.g. Box of 20">
+
+    <label>Stock status</label>
+    <select id="pfStock">
+      <option value="in">In stock</option>
+      <option value="low">Low stock</option>
+    </select>
+
+    <label>Description</label>
+    <textarea id="pfDesc" rows="2" required></textarea>
+
+    <button type="submit" class="primary-btn full">Save Product</button>
+  </form>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
